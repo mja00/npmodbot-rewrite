@@ -7,7 +7,7 @@ import discord, os, sys, traceback, asyncio
 
 print(f"{Fore.GREEN}Starting up.")
 
-#Read token file(shhhh)
+#Read token file
 token_file = open("token", "r")
 tokenForm = token_file.readline()
 token = str.strip(tokenForm)
