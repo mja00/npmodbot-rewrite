@@ -1,0 +1,9 @@
+token
+logs/chat/
+__pycache__/
+.vscode/
+<<<<<<< HEAD
+modules/config.ini
+=======
+config.ini
+>>>>>>> 9c9be58e788700731ca39b8a2fa3f994a36ac66f
