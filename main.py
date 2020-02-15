@@ -55,12 +55,12 @@ async def shutdown(ctx):
 @commands.has_any_role('Owner', 'Discord MANAGER')
 async def load(ctx, extension):
     try:
-        bot.load_extension(extension)
+        bot.load_extension(cogs_dir + "." + extension)
         await ctx.channel.send(f"{extension} loaded.")
     except commands.ExtensionAlreadyLoaded:
         await ctx.channel.send(f"The extension {extension} is already loaded.")
     except commands.ExtensionNotLoaded:
-        bot.load_extension(extension)
+        bot.load_extension(cogs_dir + "." + extension)
     except commands.ExtensionNotFound:
         await ctx.channel.send(f"The extension {extension} was not found.")
     except commands.ExtensionFailed as error:
@@ -70,7 +70,7 @@ async def load(ctx, extension):
 @commands.has_any_role('Owner', 'Discord MANAGER')
 async def unload(ctx, extension):
     try:
-        bot.unload_extension(extension)
+        bot.unload_extension(cogs_dir + "." + extension)
         await ctx.channel.send(f"{extension} unloaded.")
     except commands.ExtensionNotFound:
         await ctx.channel.send(f"The extension {extension} was not found.")
@@ -81,12 +81,12 @@ async def unload(ctx, extension):
 @commands.has_any_role('Owner', 'Discord MANAGER')
 async def reload(ctx, extension):
     try:
-        bot.reload_extension(extension)
+        bot.reload_extension(cogs_dir + "." + extension)
         await ctx.channel.send(f"{extension} reloaded.")
     except commands.ExtensionAlreadyLoaded:
         await ctx.channel.send(f"The extension {extension} is already loaded.")
     except commands.ExtensionNotLoaded:
-        bot.load_extension({extension})
+        bot.load_extension(cogs_dir + "." + extension)
     except commands.ExtensionNotFound:
         await ctx.channel.send(f"The extension {extension} was not found.")
     except commands.ExtensionFailed as error:
@@ -144,7 +144,7 @@ for extension in initHandlers:
     except commands.ExtensionAlreadyLoaded:
         print(f"The extension {extension} is already loaded.")
     except commands.ExtensionNotLoaded:
-        bot.load_extension(extension)
+        bot.load_extension(cogs_dir + "." + extension)
     except commands.ExtensionNotFound:
         print(f"The extension {extension} was not found.")
     except commands.ExtensionFailed as error:
