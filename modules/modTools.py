@@ -56,9 +56,10 @@ class modTools(commands.Cog):
         await ctx.channel.send(f"Getting a list, this will take {roleCount * 5} seconds to complete.")
         for role in rolesInServer:
             roleName = role.name
-            memberCount = role.members
-            await ctx.channel.send(f"{roleName} | {memberCount}")
-            await asyncio.sleep(5)
+            memberCount = len(role.members)
+            if roleName not in ['@everyone', 'everyone', 'mod', 'streamer']:
+                await ctx.channel.send(f"{roleName} | {memberCount}")
+                await asyncio.sleep(5)
     
     @commands.command()
     async def invite(self, ctx):
