@@ -47,6 +47,15 @@ class modTools(commands.Cog):
     @commands.command()
     async def printroles(self, ctx):
         await ctx.channel.send(f"{len(ctx.message.author.guild.roles)}/250 roles in the server.")
+
+    @commands.command()
+    @commands.has_any_role('Owner', 'Discord MANAGER', 'Mods Moderator')
+    async def allroles(self, ctx):
+        rolesInServer = ctx.message.author.guild.roles
+        for role in rolesInServer:
+            roleName = role.name
+            memberCount = role.members
+            await ctx.channel.send(f"{roleName} | {memberCount}")
     
     @commands.command()
     async def invite(self, ctx):

@@ -8,9 +8,13 @@ import discord, os, sys, traceback, asyncio
 print(f"{Fore.GREEN}Starting up.")
 
 #Read token file
-token_file = open("token", "r")
-tokenForm = token_file.readline()
-token = str.strip(tokenForm)
+try:
+    token_file = open("token", "r")
+    tokenForm = token_file.readline()
+    token = str.strip(tokenForm)
+except:
+    print("No token file")
+    sys.exit(1)
 init(convert=True)
 
 cogs_dir = "modules"
