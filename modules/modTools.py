@@ -6,7 +6,7 @@ from pymongo import MongoClient
 from pymongo.collation import Collation, CollationStrength
 from modules.commonFunctions import channelIDToName, isUserVerified
 from datetime import datetime as dt
-import discord, os, pymongo, json, requests, random, configparser
+import discord, os, pymongo, json, requests, random, configparser, asyncio
 
 #Read connection config
 config = configparser.ConfigParser()
@@ -52,10 +52,13 @@ class modTools(commands.Cog):
     @commands.has_any_role('Owner', 'Discord MANAGER', 'Mods Moderator')
     async def allroles(self, ctx):
         rolesInServer = ctx.message.author.guild.roles
+        roleCount = len(rolesInServer)
+        await ctx.channel.send(f"Getting a list, this will take {roleCount * 5} seconds to complete.")
         for role in rolesInServer:
             roleName = role.name
             memberCount = role.members
             await ctx.channel.send(f"{roleName} | {memberCount}")
+            await asyncio.sleep(5)
     
     @commands.command()
     async def invite(self, ctx):
