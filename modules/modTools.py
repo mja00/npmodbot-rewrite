@@ -53,14 +53,15 @@ class modTools(commands.Cog):
     async def allroles(self, ctx, minimumUsers = 1):
         rolesInServer = ctx.message.author.guild.roles
         roleCount = len(rolesInServer)
-        await ctx.channel.send(f"Getting a list, this will take {roleCount * 5} seconds to complete.")
+        await ctx.channel.send(f"Getting a list, this will take **at most** {roleCount * 5} seconds to complete.")
         for role in rolesInServer:
             roleName = role.name
             memberCount = len(role.members)
-            if roleName not in ['@everyone', 'everyone', 'Mod', 'Streamer']:
-                if memberCount < minimumUsers:
+            if memberCount < minimumUsers:
+                if roleName not in ['@everyone', 'everyone', 'Mod', 'Streamer']:
                     await ctx.channel.send(f"{roleName} | {memberCount}")
-    
+        await ctx.channel.send("Query complete")    
+
     @commands.command()
     async def invite(self, ctx):
         member = ctx.message.author
