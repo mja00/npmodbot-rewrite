@@ -3,6 +3,7 @@ from colorama import init, Fore, Style, Back
 from discord import File
 from discord.utils import get
 from pymongo import MongoClient
+from bs4 import BeautifulSoup
 from pymongo.collation import Collation, CollationStrength
 from modules.commonFunctions import channelIDToName, isUserVerified
 from datetime import datetime as dt
@@ -99,7 +100,13 @@ class verifyHandler(commands.Cog):
                 await ctx.channel.send("User isn't verified")
 
 
-
+def doesStreamerExist(streamer):
+    url = "https://nopixel.hasroot.com/streamers.php"
+    r = requests.get(url)
+    soup = BeautifulSoup(r.content, 'html.parser')
+    for x in (soup.find_all(string=re.compile(streamer, flags=re.I))):
+        return True
+    return False
 
 async def addRoles(db, user, ctx):
     rolesAdded = 0
@@ -111,6 +118,9 @@ async def addRoles(db, user, ctx):
     url = f"https://modlookup.mja00.dev/api/mods/user/{twitchName}"
     data = json.loads(requests.get(url).text)
     rolesToAdd = []
+    if doesStreamerExist(twitchName):
+        streamerRole = discord.utils.get(user.guild.roles, name="Streamers")
+        rolesToAdd.append(streamerRole)
     for channel in data["channels"]:
         modChan = channel["channel"]
         roleName = f"{modChan} mods"
