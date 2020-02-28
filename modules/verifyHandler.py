@@ -98,6 +98,22 @@ class verifyHandler(commands.Cog):
                 await ctx.channel.send(embed=embed)
             else:
                 await ctx.channel.send("User isn't verified")
+    
+    @commands.command()
+    @commands.has_any_role('Discord MANAGER', 'Owner', 'Mods Moderator')
+    async def modsfor(self, ctx, user:discord.Member = None):
+        if user == None:
+            user = ctx.message.author
+        uuid = user.id
+        result = users.find_one({'discord': str(uuid)})
+        twitchName = channelIDToName(result['twitch'], clientID)
+        url = f"https://modlookup.mja00.dev/api/mods/user/{twitchName}"
+        data = json.loads(requests.get(url).text)
+        streams = []
+        for channel in data['channels']:
+            streams.append(channel['channel'])
+        await ctx.channel.send(streams)
+
 
 
 def doesStreamerExist(streamer):

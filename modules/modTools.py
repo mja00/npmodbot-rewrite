@@ -92,6 +92,7 @@ class modTools(commands.Cog):
             file.write('Streamers = ')
             file.write(str(streamerNames))
             shutil.copy2('streamers.py', '/home/ubuntu/nptwitchbot')
+        print(f"Successfully scraped {len(streamerNames)} from HasRoot. Filed was copied to the correct directory. Have MJ reboot the Twitch bot.")
         
 
 
