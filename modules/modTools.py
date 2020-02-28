@@ -76,14 +76,18 @@ class modTools(commands.Cog):
     async def scrapestreamers(self, ctx):
         url = "https://nopixel.hasroot.com/streamers.php"
         r = requests.get(url)
+        currentTime = dt.now()
+
         soup = BeautifulSoup(r.content, features='html.parser')
         mydivs = soup.findAll('a', {'class': 'streamerName'})
         streamerNames = []
         for streamer in mydivs:
-            if streamer.text.lower() in ignoredStreams:
-                pass
-            else:
+            streamerData = soup.find('div', {'data-streamername': streamer.text})['data-lastonline']
+            time = dt.strptime(streamerData, '%Y-%m-%d %H:%M:%S')
+            timeSince = (currentTime - time).total_seconds()
+            if timeSince <= 784000:
                 streamerNames.append(streamer.text.lower())
+
         with open('streamers.py', 'w') as file:
             file.write('Streamers = ')
             file.write(str(streamerNames))
