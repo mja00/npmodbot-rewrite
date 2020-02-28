@@ -7,6 +7,7 @@ from bs4 import BeautifulSoup
 from pymongo.collation import Collation, CollationStrength
 from modules.commonFunctions import channelIDToName, isUserVerified
 from datetime import datetime as dt
+from streamers import Streamers
 import discord, os, pymongo, json, requests, configparser, re 
 
 #Read connection config

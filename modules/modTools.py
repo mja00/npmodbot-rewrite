@@ -6,6 +6,7 @@ from pymongo import MongoClient
 from pymongo.collation import Collation, CollationStrength
 from modules.commonFunctions import channelIDToName, isUserVerified
 from datetime import datetime as dt
+from bs4 import BeautifulSoup
 import discord, os, pymongo, json, requests, random, configparser, asyncio
 
 #Read connection config
@@ -68,6 +69,21 @@ class modTools(commands.Cog):
         channel = ctx.channel
         invite = await channel.create_invite(max_age=10800, max_uses=5, reason=f"Auto invite for {ctx.message.author.name}")
         await member.send(f"Here's the invite. This is valid for 5 uses and for 3 hours. If you need more than 5 use please contact mja00. {invite.url}")
+    
+    @commands.command()
+    @commands.has_any_role('Owner', 'Discord MANAGER', 'Mods Moderator')
+    async def scrapestreamers(self):
+        url = "https://nopixel.hasroot.com/streamers.php"
+        r = requests.get(url)
+        soup = BeautifulSoup(r.content, features='html.parser')
+        mydivs = soup.findAll('a', {'class': 'streamerName'})
+        streamerNames = []
+        for streamer in mydivs:
+            streamerNames.append(streamer.text)
+        with open('streamers.py', 'w') as file:
+            file.write('Streamers = ')
+            file.write(str(streamerNames))
+        
 
 
 def setup(bot):
