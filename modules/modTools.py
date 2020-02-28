@@ -7,7 +7,7 @@ from pymongo.collation import Collation, CollationStrength
 from modules.commonFunctions import channelIDToName, isUserVerified
 from datetime import datetime as dt
 from bs4 import BeautifulSoup
-import discord, os, pymongo, json, requests, random, configparser, asyncio
+import discord, os, pymongo, json, requests, random, configparser, asyncio, shutil
 
 #Read connection config
 config = configparser.ConfigParser()
@@ -17,7 +17,7 @@ host = config['mysql']['host']
 user = config['mysql']['user']
 passwd = config['mysql']['passwd']
 database = config['mysql']['database']
-ignoredStreams = ['lirik', 'sodapoppin', 'forsen', 'timthetatman', 'kitboga']
+ignoredStreams = ['lirik', 'sodapoppin', 'forsen', 'timthetatman', 'kitboga', 'xqcow', 'nymn', 'moonmoon', 'mizkif', 'greekgodx', 'amouranth']
 
 clientID = config['mainsettings']['clientID']
 client = pymongo.MongoClient(config['mainsettings']['mongoDB'])
@@ -87,6 +87,7 @@ class modTools(commands.Cog):
         with open('streamers.py', 'w') as file:
             file.write('Streamers = ')
             file.write(str(streamerNames))
+            shutil.copy2('streamers.py', '/home/ubuntu/nptwitchbot')
         
 
 
