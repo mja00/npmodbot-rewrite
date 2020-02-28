@@ -72,7 +72,7 @@ class modTools(commands.Cog):
     
     @commands.command()
     @commands.has_any_role('Owner', 'Discord MANAGER', 'Mods Moderator')
-    async def scrapestreamers(self):
+    async def scrapestreamers(self, ctx):
         url = "https://nopixel.hasroot.com/streamers.php"
         r = requests.get(url)
         soup = BeautifulSoup(r.content, features='html.parser')
