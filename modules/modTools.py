@@ -79,7 +79,7 @@ class modTools(commands.Cog):
         mydivs = soup.findAll('a', {'class': 'streamerName'})
         streamerNames = []
         for streamer in mydivs:
-            streamerNames.append(streamer.text)
+            streamerNames.append(streamer.text.lower())
         with open('streamers.py', 'w') as file:
             file.write('Streamers = ')
             file.write(str(streamerNames))
