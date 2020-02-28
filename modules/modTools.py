@@ -17,6 +17,7 @@ host = config['mysql']['host']
 user = config['mysql']['user']
 passwd = config['mysql']['passwd']
 database = config['mysql']['database']
+ignoredStreams = ['lirik', 'sodapoppin', 'forsen', 'timthetatman']
 
 clientID = config['mainsettings']['clientID']
 client = pymongo.MongoClient(config['mainsettings']['mongoDB'])
@@ -79,7 +80,10 @@ class modTools(commands.Cog):
         mydivs = soup.findAll('a', {'class': 'streamerName'})
         streamerNames = []
         for streamer in mydivs:
-            streamerNames.append(streamer.text.lower())
+            if streamer.text.lower in ignoredStreams:
+                pass
+            else:
+                streamerNames.append(streamer.text.lower())
         with open('streamers.py', 'w') as file:
             file.write('Streamers = ')
             file.write(str(streamerNames))
