@@ -71,9 +71,10 @@ class modTools(commands.Cog):
         invite = await channel.create_invite(max_age=10800, max_uses=5, reason=f"Auto invite for {ctx.message.author.name}")
         await member.send(f"Here's the invite. This is valid for 5 uses and for 3 hours. If you need more than 5 use please contact mja00. {invite.url}")
     
-    @commands.command()
+    """ @commands.command(disabled=True)
     @commands.has_any_role('Owner', 'Discord MANAGER', 'Mods Moderator')
     async def scrapestreamers(self, ctx):
+        await ctx.channel.send("Scraping streamers, this will take a while.")
         url = "https://nopixel.hasroot.com/streamers.php"
         r = requests.get(url)
         currentTime = dt.now()
@@ -92,8 +93,8 @@ class modTools(commands.Cog):
             file.write('Streamers = ')
             file.write(str(streamerNames))
             shutil.copy2('streamers.py', '/home/ubuntu/nptwitchbot')
-        print(f"Successfully scraped {len(streamerNames)} from HasRoot. Filed was copied to the correct directory. Have MJ reboot the Twitch bot.")
-        
+        await ctx.channel.send(f"Successfully scraped {len(streamerNames)} from HasRoot. Filed was copied to the correct directory. Have MJ reboot the Twitch bot.")
+         """
 
 
 def setup(bot):
