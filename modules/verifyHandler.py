@@ -131,24 +131,29 @@ async def addRoles(db, user, ctx):
     result = db.find_one({'discord': str(uuid)})
     channelID = result["twitch"]
     twitchName = channelIDToName(channelID, clientID)
+    if doesStreamerExist(twitchName):
+                streamerRole = discord.utils.get(user.guild.roles, name="Streamers")
+                await user.add_roles(streamerRole)
+                await ctx.channel.send("Streamer role added.")
     url = f"https://modlookup.mja00.dev/api/mods/user/{twitchName}"
     data = json.loads(requests.get(url).text)
     rolesToAdd = []
-    if doesStreamerExist(twitchName):
-        streamerRole = discord.utils.get(user.guild.roles, name="Streamers")
-        rolesToAdd.append(streamerRole)
-    for channel in data["channels"]:
-        modChan = channel["channel"]
-        roleName = f"{modChan} mods"
-        try:        
-            role = discord.utils.get(user.guild.roles, name=roleName)
-            if role is None:
-                continue
-            else:
-                rolesToAdd.append(role)
-                rolesAdded += 1
-        except discord.DiscordException:
-            pass
+    try:
+        for channel in data["channels"]:
+            modChan = channel["channel"]
+            roleName = f"{modChan} mods"
+            try:        
+                role = discord.utils.get(user.guild.roles, name=roleName)
+                if role is None:
+                    continue
+                else:
+                    rolesToAdd.append(role)
+                    rolesAdded += 1
+            except discord.DiscordException:
+                pass
+    except KeyError:
+        await ctx.channel.send("This user has no entry in the modlookup API.")
+        return 0
     await user.add_roles(*rolesToAdd)
     await ctx.channel.send(f"Roles updated for {user.display_name}")
     print(f"{user.name} has been updated.")
