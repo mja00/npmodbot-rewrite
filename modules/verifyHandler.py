@@ -1,4 +1,4 @@
-from discord.ext import commands
+from discord.ext import commands, tasks
 from colorama import init, Fore, Style, Back
 from discord import File
 from discord.utils import get
@@ -27,6 +27,10 @@ class verifyHandler(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self._last_member = None
+        self.printer.start()
+    
+    def cog_unload(self):
+        self.printer.cancel()
 
     #Start verification
     @commands.command()
@@ -113,6 +117,10 @@ class verifyHandler(commands.Cog):
         for channel in data['channels']:
             streams.append(channel['channel'])
         await ctx.channel.send(streams)
+    
+    @tasks.loop(seconds=10.0)
+    async def auto_update(self):
+        print("It's been 10 seconds")
 
 
 
