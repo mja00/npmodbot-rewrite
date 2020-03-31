@@ -27,10 +27,10 @@ class verifyHandler(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self._last_member = None
-        self.printer.start()
+        self.auto_update.start()
     
     def cog_unload(self):
-        self.printer.cancel()
+        self.auto_update.cancel()
 
     #Start verification
     @commands.command()
