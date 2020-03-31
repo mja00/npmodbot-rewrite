@@ -22,6 +22,7 @@ clientID = config['mainsettings']['clientID']
 client = pymongo.MongoClient(config['mainsettings']['mongoDB'])
 db = client.nopixel
 users = db.users
+verify = db.verify
 
 class verifyHandler(commands.Cog):
     def __init__(self, bot):
@@ -120,7 +121,9 @@ class verifyHandler(commands.Cog):
     
     @tasks.loop(seconds=10.0)
     async def auto_update(self):
-        print("It's been 10 seconds")
+        allNeededVerify = verify.find({})
+        for document in allNeededVerify:
+            print(document[uuid])
 
 
 
@@ -164,6 +167,39 @@ async def addRoles(db, user, ctx):
         print("This user has no entry in the modlookup API.")
     await user.add_roles(*rolesToAdd)
     await ctx.channel.send(f"Roles updated for {user.display_name}")
+    print(f"{user.name} has been updated.")
+    return rolesAdded
+
+async def addAutoRoles(db, user):
+    rolesAdded = 0
+    uuid = user.id
+    channelID = None
+    result = db.find_one({'discord': str(uuid)})
+    channelID = result["twitch"]
+    twitchName = channelIDToName(channelID, clientID)
+    url = f"https://modlookup.mja00.dev/api/mods/user/{twitchName}"
+    data = json.loads(requests.get(url).text)
+    rolesToAdd = []
+    if doesStreamerExist(twitchName):
+        streamerRole = discord.utils.get(user.guild.roles, name="Streamers")
+        rolesToAdd.append(streamerRole)
+        rolesAdded += 1
+    try:
+        for channel in data["channels"]:
+            modChan = channel["channel"]
+            roleName = f"{modChan} mods"
+            try:        
+                role = discord.utils.get(user.guild.roles, name=roleName)
+                if role is None:
+                    continue
+                else:
+                    rolesToAdd.append(role)
+                    rolesAdded += 1
+            except discord.DiscordException:
+                pass
+    except KeyError:
+        print("This user has no entry in the modlookup API.")
+    await user.add_roles(*rolesToAdd)
     print(f"{user.name} has been updated.")
     return rolesAdded
 
