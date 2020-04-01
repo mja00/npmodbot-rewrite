@@ -19,7 +19,7 @@ init(convert=True)
 
 cogs_dir = "modules"
 
-bot = commands.Bot(command_prefix="!", status=discord.Status.do_not_disturb, activity=discord.Streaming(name="Starting...", url="https://twitch.tv/mja00"))
+bot = commands.Bot(command_prefix=">>", status=discord.Status.do_not_disturb, activity=discord.Streaming(name="Starting...", url="https://twitch.tv/mja00"))
 bot.remove_command("help")
 
 initHandlers = ['verifyHandler', 'modTools', 'roleHandler', 'banHandler', 'updateHandler']

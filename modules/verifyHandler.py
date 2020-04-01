@@ -121,9 +121,24 @@ class verifyHandler(commands.Cog):
     
     @tasks.loop(seconds=10.0)
     async def auto_update(self):
+        print("Checking for new verifications!")
         for document in verify.find():
-            #print(document['uuid'])
-            pass
+            uuid = int(document['uuid'])
+            guild = self.bot.get_guild(579438231964352543)
+            user = guild.get_member(uuid)
+            rolesAdded = await addAutoRoles(users, user)
+            if rolesAdded > 0:
+                modRole = discord.utils.get(user.guild.roles, name="Mod")
+                await user.add_roles(modRole)
+            else:
+                channelToSend = self.bot.get_channel(579450156039012385)
+                await channelToSend.send(f"<@{user.id}> >> It seems that we either have no roles for the streamers you mod for **or** you don't mod for any NoPixel streamers.")
+            verify.delete_one({"uuid": str(uuid)})
+    
+    @auto_update.before_loop
+    async def before_auto_update(self):
+        print('waiting...')
+        await self.bot.wait_until_ready()
 
 
 
@@ -171,6 +186,7 @@ async def addRoles(db, user, ctx):
     return rolesAdded
 
 async def addAutoRoles(db, user):
+    print(f"Starting role addition of {user}")
     rolesAdded = 0
     uuid = user.id
     channelID = None
@@ -188,7 +204,7 @@ async def addAutoRoles(db, user):
         for channel in data["channels"]:
             modChan = channel["channel"]
             roleName = f"{modChan} mods"
-            try:        
+            try:
                 role = discord.utils.get(user.guild.roles, name=roleName)
                 if role is None:
                     continue
