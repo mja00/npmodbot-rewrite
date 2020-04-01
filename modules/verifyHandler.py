@@ -121,10 +121,8 @@ class verifyHandler(commands.Cog):
     
     @tasks.loop(seconds=10.0)
     async def auto_update(self):
-        allNeededVerify = verify.find()
-        print(allNeededVerify)
-        for document in allNeededVerify:
-            print(document[uuid])
+        for document in verify.find():
+            print(document)
 
 
 
