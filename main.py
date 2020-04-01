@@ -174,6 +174,6 @@ async def on_member_join(member):
     userid = member.id
     if channel is not None:
         print(f"{member.name} has joined the server.")
-        await channel.send(f"Welcome to the NoPixel Moderator Discord <@{userid}>. Authenticate yourself here: https://nopixel.mja00.dev/auth and then run !update in <#579450156039012385>")
+        await channel.send(f"Welcome to the NoPixel Moderator Discord <@{userid}>. Authenticate yourself here: https://nopixel.mja00.dev/auth")
 
 bot.run(token)

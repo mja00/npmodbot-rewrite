@@ -37,7 +37,7 @@ class verifyHandler(commands.Cog):
     @commands.command()
     async def verify(self, ctx):
         member = ctx.message.author
-        await ctx.channel.send(f"<@{member.id}> >> To begin the verification process please go to https://nopixel.mja00.dev/auth and follow the prompts. Once you're done with that please run !update here.")
+        await ctx.channel.send(f"<@{member.id}> >> To begin the verification process please go to https://nopixel.mja00.dev/auth and follow the prompts.")
 
     @commands.command()
     async def update(self, ctx, user:discord.Member = None):
